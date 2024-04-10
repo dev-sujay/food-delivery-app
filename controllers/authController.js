@@ -1,6 +1,6 @@
 const User = require('../models/userModel')
-const bcrypt = require('bcryptjs')
 const JWT = require('jsonwebtoken')
+const { encrypt, isMatch, generateToken } = require('../utils/utils')
 
 const register = async (req, res) => {
     try {
@@ -12,15 +12,13 @@ const register = async (req, res) => {
             })
         }
         const userExists = await User.findOne({email, userName})
-        console.log(userExists)
         if (userExists) {
             return res.status(400).send({
                 success: false,
                 message: "User already exists"
             })
         }
-        const salt = bcrypt.genSaltSync(10)
-        const hashedPw = await  bcrypt.hash(password, salt)
+        const hashedPw = await encrypt(password)
         const newUser =await  User.create({
             ...req.body,
             password: hashedPw
@@ -54,14 +52,13 @@ const login = async (req, res) => {
                 message: "User not found"
             })
         }
-        const isMatch = await bcrypt.compare(password, user.password)
-        if (!isMatch) {
+        if (!isMatch(password, user.password)) {
             return res.status(401).send({
                 success: false,
                 message: "Invalid credentials"
             })
         }
-        const token = JWT.sign({id: user._id}, process.env.JWT_SECRET)
+        const token = generateToken(user)
         return res.status(200).send({
             success: true,
             message: "User logged in successfully",

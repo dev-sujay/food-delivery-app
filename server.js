@@ -28,6 +28,9 @@ app.use(cors());
 //routes
 app.use("/api/v1/auth", require('./routes/authRoute'));
 app.use("/api/v1/users", require('./routes/userRoute'));
+app.use("/api/v1/foodItem", require('./routes/foodItemRoute'));
+app.use("/api/v1/category", require('./routes/categoryRoute'));
+app.use("/api/v1/order", require('./routes/orderRoute'));
 
 
 app.listen(PORT, () => {

@@ -1,4 +1,4 @@
- const mongoose = require("mongoose");
+const mongoose = require("mongoose");
 
 const userSchema = new mongoose.Schema({
     userName: {
@@ -21,15 +21,15 @@ const userSchema = new mongoose.Schema({
     address: {
         type: String,
     },
-    userType : {
-        type : String,
-        required : true,
-        enums : ["admin", "user", "deliveryAgent"],
-        default : "user"
+    userType: {
+        type: String,
+        required: true,
+        enums: ["admin", "user", "deliveryAgent"],
+        default: "user"
     },
-    profilePic : {
-        type : String,
-        default : "https://i.pinimg.com/564x/40/25/ab/4025abd53db682406ae17b9d7c1e4f54.jpg"
+    profilePic: {
+        type: String,
+        default: "https://i.pinimg.com/564x/40/25/ab/4025abd53db682406ae17b9d7c1e4f54.jpg"
     }
 }, { timestamps: true });
 

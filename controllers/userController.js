@@ -1,5 +1,5 @@
 const User = require('../models/userModel')
-const bcrypt = require('bcryptjs')
+const { isMatch, encrypt } = require('../utils/utils')
 
 
 const getUser = async (req, res) => {
@@ -90,15 +90,13 @@ const changePassword = async (req, res) => {
                 message: "Please provide old password and new password"
             })
         }
-        const isMatch = await bcrypt.compare(oldPassword, user.password)
-        if (!isMatch) {
+        if (!isMatch(oldPassword, user.password)) {
             return res.status(401).send({
                 success: false,
                 message: "Invalid old password"
             })
         }
-        const salt = bcrypt.genSaltSync(10)
-        const hashedPw = await bcrypt.hash(newPassword, salt)
+        const hashedPw = await encrypt(newPassword)
         await User.findByIdAndUpdate( req.query.id, {
             password: hashedPw
         })

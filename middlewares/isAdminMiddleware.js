@@ -16,11 +16,17 @@ module.exports = async (req, res, next) => {
                 message: "User not found"
             })
         }
+        if (user.userType !== "admin") {
+            return res.status(403).send({
+                success: false,
+                message: "Forbidden access"
+            })
+        }
         next()
     } catch (error) {
-        res.status(500).send({
+      return res.status(500).send({
             success: false,
             message: error.message
-        })
+        })  
     }
 }
